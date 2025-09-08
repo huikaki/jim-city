@@ -4,7 +4,7 @@
   "description": "Content Management System for Maid Agency",
   "main": "server/index.js",
   "engines": {
-    "node": "18.x"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
