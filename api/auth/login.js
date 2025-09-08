@@ -21,24 +21,32 @@ module.exports = async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    console.log('Login attempt:', { username, password });
+
     // Check if user exists
     let user = await User.findOne({ username });
+    console.log('Found user:', user);
     
     // If no users exist, create default admin
     if (!user) {
+      console.log('No user found, creating default admin');
       const defaultUser = new User({
         username: 'admin',
         password: 'admin123', // In production, this should be hashed
         role: 'admin'
       });
       await defaultUser.save();
+      console.log('Default admin created');
       
       if (username === 'admin' && password === 'admin123') {
         user = defaultUser;
       }
     }
 
+    console.log('Final user check:', { user: user ? user.username : 'none', password });
+
     if (!user || user.password !== password) {
+      console.log('Authentication failed');
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
