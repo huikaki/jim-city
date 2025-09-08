@@ -1,6 +1,7 @@
 const { connectDB } = require('../_lib/db');
 const { User } = require('../_lib/models');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 module.exports = async (req, res) => {
   await connectDB();
@@ -30,22 +31,26 @@ module.exports = async (req, res) => {
     // If no users exist, create default admin
     if (!user) {
       console.log('No user found, creating default admin');
+      const hashedPassword = await bcrypt.hash('admin123', 10);
       const defaultUser = new User({
         username: 'admin',
-        password: 'admin123', // In production, this should be hashed
+        password: hashedPassword,
         role: 'admin'
       });
       await defaultUser.save();
-      console.log('Default admin created');
+      console.log('Default admin created with hashed password');
       
       if (username === 'admin' && password === 'admin123') {
         user = defaultUser;
       }
     }
 
-    console.log('Final user check:', { user: user ? user.username : 'none', password });
+    console.log('Final user check:', { user: user ? user.username : 'none' });
 
-    if (!user || user.password !== password) {
+    // Compare password using bcrypt
+    const isPasswordValid = user && await bcrypt.compare(password, user.password);
+    
+    if (!user || !isPasswordValid) {
       console.log('Authentication failed');
       return res.status(401).json({ error: 'Invalid credentials' });
     }
