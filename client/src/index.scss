@@ -1,0 +1,729 @@
+// Custom Bootstrap 5 Variables (must be defined before importing Bootstrap)
+
+// Color system
+// scss-docs-start gray-colors-map
+$white: #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black: #000 !default;
+// scss-docs-end gray-colors-map
+
+// scss-docs-start gray-colors-map
+$grays: (
+  "100": $gray-100,
+  "200": $gray-200,
+  "300": $gray-300,
+  "400": $gray-400,
+  "500": $gray-500,
+  "600": $gray-600,
+  "700": $gray-700,
+  "800": $gray-800,
+  "900": $gray-900,
+) !default;
+// scss-docs-end gray-colors-map
+
+// scss-docs-start color-variables
+$blue: #0d6efd !default;
+$indigo: #6610f2 !default;
+$purple: #6f42c1 !default;
+$pink: #d63384 !default;
+$red: #dc3545 !default;
+$orange: #fd7e14 !default;
+$yellow: #ffc107 !default;
+$green: #198754 !default;
+$teal: #01ab6c !default;
+$cyan: #0dcaf0 !default;
+$light: #e1e1e1 !default;
+$ClassicBLK: #222 !default;
+// scss-docs-end color-variables
+
+// scss-docs-start colors-map
+$colors: (
+  "blue": $blue,
+  "indigo": $indigo,
+  "purple": $purple,
+  "pink": $pink,
+  "red": $red,
+  "orange": $orange,
+  "yellow": $yellow,
+  "green": $green,
+  "teal": $teal,
+  "cyan": $cyan,
+  "black": $black,
+  "white": $white,
+  "gray": $gray-600,
+  "gray-dark": $gray-800,
+) !default;
+
+// scss-docs-start theme-color-variables
+$primary: #51C3C4 !default;
+$primary-light: #f1f9f7 !default;
+$secondary: #FFC107 !default;
+$tertiary: #27a6de !default;
+$success: #96bd3d !default;
+$info: #ce3f7b !default;
+$warning: #F06621 !default;
+$danger: #b73030 !default;
+$light: #fff8ef !default;
+$dark: $gray-900 !default;
+$breadcumb: #bbb !default;
+$link: #4a63c2 !default;
+$gold: #d69f0e !default;
+// scss-docs-end theme-color-variables
+
+// scss-docs-start theme-colors-map
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark,
+  "breadcumb": $breadcumb,
+) !default;
+// scss-docs-end theme-colors-map
+
+// Custom spacing utilities
+$spacer: 1rem !default;
+$spacers: () !default;
+$spacers: map-merge(
+  (
+    0: 0,
+    1: ($spacer * 0.25),
+    2: ($spacer * 0.5),
+    3: $spacer,
+    4: ($spacer * 1.5),
+    5: ($spacer * 3),
+    6: ($spacer * 3.5),
+    7: ($spacer * 4),
+    8: ($spacer * 4.5),
+    9: ($spacer * 6),
+    10: ($spacer * 8),
+    /* by pixel */
+    30px: ($spacer * 1.875),
+    32px: ($spacer * 2),
+    50px: ($spacer * 3.125),
+    60px: ($spacer * 3.75),
+    40px: ($spacer * 2.5),
+    80px: ($spacer * 5),
+    100px: ($spacer * 6.25),
+    119px: ($spacer * 7.4375),
+  ),
+  $spacers
+);
+
+// Custom grid breakpoints
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+);
+
+// Import Bootstrap 5 with custom variables
+@import '~bootstrap/scss/bootstrap';
+
+// Import Bootstrap Icons
+@import '~bootstrap-icons/font/bootstrap-icons.css';
+
+// Custom styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5;
+}
+
+// Custom styles to complement Bootstrap
+
+// Custom enhancements for the maid agency app
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+// Card hover effects
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Custom gradient backgrounds
+.gradient-bg {
+  background: linear-gradient(135deg, $primary 0%, $secondary 100%);
+}
+
+.gradient-bg-primary {
+  background: linear-gradient(135deg, $primary 0%, $tertiary 100%);
+}
+
+.gradient-bg-secondary {
+  background: linear-gradient(135deg, $secondary 0%, $warning 100%);
+}
+
+// Enhanced pagination
+.pagination {
+  .page-link {
+    border-radius: 0.375rem;
+    margin: 0 2px;
+    color: $primary;
+    border-color: $primary;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background-color: $primary-light;
+      border-color: $primary;
+      color: $primary;
+    }
+  }
+  
+  .page-item.active .page-link {
+    background-color: $primary;
+    border-color: $primary;
+    color: white;
+  }
+  
+  .page-item.disabled .page-link {
+    color: $breadcumb;
+    border-color: $gray-300;
+  }
+}
+
+// Custom button styles
+.btn-primary {
+  background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+  border-color: $primary;
+  
+  &:hover {
+    background: linear-gradient(135deg, darken($primary, 5%) 0%, darken($primary, 15%) 100%);
+    border-color: darken($primary, 5%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba($primary, 0.3);
+  }
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, $secondary 0%, darken($secondary, 10%) 100%);
+  border-color: $secondary;
+  color: $dark;
+  
+  &:hover {
+    background: linear-gradient(135deg, darken($secondary, 5%) 0%, darken($secondary, 15%) 100%);
+    border-color: darken($secondary, 5%);
+    color: $dark;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba($secondary, 0.3);
+  }
+}
+
+// Custom badge styles
+.badge {
+  &.bg-primary {
+    background-color: $primary !important;
+  }
+  
+  &.bg-secondary {
+    background-color: $secondary !important;
+    color: $dark !important;
+  }
+  
+  &.bg-success {
+    background-color: $success !important;
+  }
+  
+  &.bg-info {
+    background-color: $info !important;
+  }
+  
+  &.bg-warning {
+    background-color: $warning !important;
+    color: white !important;
+  }
+  
+  &.bg-danger {
+    background-color: $danger !important;
+  }
+}
+
+// Loading spinner enhancement
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+// Semantic layout enhancements
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+// Footer styling
+footer {
+  margin-top: auto;
+  
+  a:hover {
+    color: $light !important;
+    transition: color 0.2s ease;
+  }
+  
+  .bi {
+    transition: transform 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+// Header/Navigation enhancements
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Skip to content link (accessibility)
+.skipToContent {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: $primary;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 1030;
+  border-radius: 0 0 4px 4px;
+  
+  &:focus {
+    top: 0;
+  }
+}
+
+// Main header styles
+.main-header {
+  background: white;
+  border-bottom: 1px solid $gray-200;
+  
+  .navbar {
+    padding: 0.5rem 0;
+  }
+  
+  .brandlogo img {
+    height: 50px;
+    width: auto;
+  }
+  
+  .language {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: $tertiary;
+    }
+  }
+  
+  .navbar-toggler {
+    .fa-bars {
+      color: $primary;
+    }
+  }
+  
+  .nav-link {
+    color: $dark;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.2s ease;
+    
+    &:hover, &.active {
+      color: $primary;
+    }
+  }
+  
+  .dropdown-menu {
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    background-color: white;
+    
+    .dropdown-item {
+      padding: 0.75rem 1.5rem;
+      color: $dark;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: $primary-light;
+        color: $primary;
+      }
+    }
+  }
+  
+  // Custom button styles in header
+  .btn-outline-secondary {
+    color: $primary;
+    border-color: $primary;
+    
+    &:hover {
+      background-color: $primary;
+      border-color: $primary;
+      color: white;
+    }
+  }
+  
+  .btn-outline-primary {
+    color: $tertiary;
+    border-color: $tertiary;
+    
+    &:hover {
+      background-color: $tertiary;
+      border-color: $tertiary;
+      color: white;
+    }
+  }
+}
+
+// Floating action buttons
+.bottom-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  
+  .circle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    &.phone {
+      background: linear-gradient(135deg, $primary 0%, $tertiary 100%);
+    }
+    
+    &.wts {
+      background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    }
+  }
+}
+
+.hoverEffect2 {
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.no-text-underline {
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+// Font Awesome icon styling
+.fa-icon {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+// Font Awesome loading fallback
+svg[data-icon] {
+  display: inline-block;
+  height: 1em;
+  overflow: visible;
+  vertical-align: -0.125em;
+}
+
+// Responsive adjustments
+@media (max-width: 1199.98px) {
+  .main-header {
+    .mobileheaderdiv {
+      width: 100%;
+    }
+  }
+}
+a.skipToContent {
+  position: absolute;
+  top: -999px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: auto;
+  background-color: $primary;
+  color: black;
+  font-size: 1rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: -999;
+}
+
+body{
+  overflow-x: hidden;
+  position: relative;
+}
+// header
+.main-header{
+  position: sticky;
+  z-index: 999;
+  background-color: white;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+.brandlogo{
+  width: 100%;
+  max-width: 350px;
+  img{
+    width: 100%;
+    object-fit: cover;
+  }
+}
+a.no-text-underline{
+  text-decoration: none;
+}
+
+// 
+.banner-image{
+  width: 100%;
+  height: 80vh;
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+}
+.mobileheaderdiv{
+  @media (max-width: 1200px) {
+    width: 100%;
+  }
+}
+.section-padding{
+  padding: 100px 0;
+}
+.border-line{
+  border-top: 2px solid $primary;
+  border-bottom: 2px solid $primary;
+}
+
+.card-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 22px;
+  border: 1px solid $primary;
+  background-color: #51c2c42a;
+  padding: 40px;
+  .title{
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  .content{
+    span{
+      margin: 5px;
+    }
+  }
+}
+
+.BackBtn {
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+  padding: 15px 35px;
+  color: #FFF;
+  width: 180px;
+  &.yellow{
+color: black;
+  }
+  &::before {
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 400;
+    content: "\f061";
+    position: absolute;
+    opacity: 0;
+    right: -24px;
+    transition: 0.5s;
+    vertical-align: -50%;
+}
+}
+
+.hoverEffect:hover .BackBtn, .hoverEffect:focus-visible .BackBtn {
+  padding-right: 45px;
+  padding-left: 25px;
+  background-color:$secondary;
+  border-color:$secondary;
+}
+.hoverEffect:hover .BackBtn::before, .hoverEffect:focus-visible .BackBtn::before {
+  opacity: 1;
+  right: 10px;
+}
+
+.full-image{
+  width: 100%;
+  img{
+    width: 100%;
+    object-fit: cover;
+  }
+}
+.bg-secondary-light{
+  background-color: #fff8e347;
+}
+.footer-img{
+  width: 100%;
+  max-width: 424px;
+  img{
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+footer{
+  padding: 100px 0;
+}
+.footer-contact{
+  a{
+   div{
+    margin-bottom: 10px;
+    span{
+      i{
+        width: 21px;
+        margin-right: 10px;
+        font-size: 1.2rem;
+      }
+    }
+   }
+  }
+}
+
+.bottom-btn{
+  position: fixed;
+  bottom: 5%;
+  right: 2%;
+  z-index: 3;
+}
+.circle-btn{
+  width: 65px;
+  height: 65px;
+  border-radius: 100%;
+  &.phone{
+    background: $primary;
+    i{
+      font-size: 1.5rem;
+      color: white;
+    }
+  }
+  &.wts{
+    background: #25D366;
+    i{
+      font-size: 2rem;
+      color: white;
+    }
+  }
+  span{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+}
+.hoverEffect2:hover, .hoverEffect2:focus{
+  div{
+  box-shadow: 0px 0px 10px 1px rgb(175 175 175);
+}
+}
+.sub-banner{
+  width: 100%;
+  background-color: $primary;
+  color: white;
+  height: 110px;
+  .banner-sub-word{
+    height: 100%;
+    display: flex;
+
+    align-items: center;
+  }
+}
+
+
+.nav.tabs{
+justify-content: center;
+column-gap: 30px;
+.nav-link{
+  border: 1px solid $primary;
+  width: 100%;
+  min-width: 180px;
+  padding: 18px 30px;
+}
+}
+.tab-content{
+  margin-top: 30px;
+  width: 100%;
+  padding: 25px 35px;
+  max-width: 1100px;
+  margin: 30px auto;
+  background: #e6f5f5;
+  border-radius: 22px;
+}
+.mr-3{
+  margin-right: 1rem;
+}
+.map{
+  width: 100%;
+  height: 400px;
+  iframe{
+    width: 100%;
+    height: 100%;
+  }
+}

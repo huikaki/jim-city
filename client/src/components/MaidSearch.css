@@ -1,0 +1,152 @@
+/* Custom styles for multi-select dropdown */
+.multi-select-dropdown {
+  position: relative;
+}
+
+.multi-select-dropdown .form-control:hover {
+  border-color: #86b7fe;
+}
+
+.multi-select-dropdown .form-control.border-primary {
+  border-color: #0d6efd !important;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.multi-select-dropdown .dropdown-menu {
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.multi-select-dropdown .dropdown-item {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.multi-select-dropdown .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.multi-select-dropdown .dropdown-item.active {
+  background-color: #e7f3ff;
+  color: #0d6efd;
+}
+
+.multi-select-dropdown .form-check-input {
+  margin-top: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .multi-select-dropdown .dropdown-menu {
+    max-height: 250px;
+  }
+  
+  .multi-select-dropdown .dropdown-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animation for dropdown */
+.multi-select-dropdown .dropdown-menu.show {
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Modal styling */
+.modal.show {
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.modal-dialog {
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal content styling */
+.modal-body h6 {
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.modal-body .row + .row {
+  border-top: 1px solid #f8f9fa;
+  padding-top: 1rem;
+}
+
+/* Accordion styling in modal */
+.accordion-button:not(.collapsed) {
+  background-color: #f8f9fa;
+  color: #0d6efd;
+}
+
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: #86b7fe;
+}
+
+/* Badge styling */
+.badge.fs-6 {
+  font-size: 0.875rem !important;
+  padding: 0.5rem 0.75rem;
+}
+
+/* Accordion transitions */
+.accordion-collapse {
+  transition: height 0.35s ease;
+}
+
+.accordion-collapse.collapse:not(.show) {
+  height: 0;
+  overflow: hidden;
+}
+
+.accordion-collapse.collapse.show {
+  height: auto;
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+  .modal-lg {
+    max-width: 95%;
+  }
+  
+  .modal-body .col-sm-6 {
+    margin-bottom: 1rem;
+  }
+}

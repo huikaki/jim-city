@@ -1,0 +1,182 @@
+/* About Us Page Styles */
+.about-us-page {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Banner Section */
+.bannerSection {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.sub-banner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.banner-sub-word h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Section Padding */
+.section-padding {
+  padding: 4rem 0;
+}
+
+/* Border Line */
+.border-line {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.border-line::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: var(--bs-primary);
+}
+
+/* Typography */
+.h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.word-1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--bs-primary);
+}
+
+/* Button Styles */
+.BackBtn {
+  padding: 12px 30px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: none;
+  font-size: 1rem;
+}
+
+.BackBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.BackBtn.yellow {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.BackBtn.yellow:hover {
+  background-color: #ffb300;
+}
+
+/* Hover Effects */
+.hoverEffect {
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.hoverEffect:hover {
+  transform: translateY(-2px);
+}
+
+/* Image Styles */
+.full-image {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.full-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.full-image:hover img {
+  transform: scale(1.05);
+}
+
+/* Background Colors */
+.bg-secondary-light {
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  margin: 2rem 0;
+}
+
+/* Text Colors */
+.text-primary {
+  color: #0d6efd !important;
+}
+
+/* Spacing */
+.my-7 {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .banner-sub-word h1 {
+    font-size: 2rem;
+  }
+  
+  .h2 {
+    font-size: 2rem;
+  }
+  
+  .h3 {
+    font-size: 1.5rem;
+  }
+  
+  .section-padding {
+    padding: 2rem 0;
+  }
+  
+  .full-image {
+    height: 250px;
+  }
+  
+  .my-7 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .banner-sub-word h1 {
+    font-size: 1.5rem;
+  }
+  
+  .BackBtn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}

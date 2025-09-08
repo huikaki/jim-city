@@ -1,0 +1,10 @@
+{
+  "name": "maid-service-api",
+  "version": "1.0.0",
+  "description": "API for Maid Service App",
+  "main": "index.js",
+  "dependencies": {
+    "mongoose": "^7.0.3",
+    "jsonwebtoken": "^9.0.0"
+  }
+}
