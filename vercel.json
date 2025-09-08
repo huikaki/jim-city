@@ -13,5 +13,7 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": "public"
 }
