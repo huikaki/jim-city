@@ -3,32 +3,8 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
-/* Banner Section */
-.bannerSection {
-  background: linear-gradient(135deg, var(--brand-primary) 0%, rgba(var(--bs-link-color-rgb), 0.78) 100%);
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  color: white;
-}
-
-/* Keep the banner a single clean teal block (override the global
-   .sub-banner teal stripe so it doesn't clash inside the banner). */
-.about-us-page .sub-banner {
-  width: 100%;
-  height: 100%;
-  background: transparent !important;
-  display: flex;
-  align-items: center;
-}
-
-.banner-sub-word h1 {
-  font-size: 3rem;
-  font-weight: 700;
-  text-align: center;
-  margin: 0;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
+/* Banner styles are now global (.bannerSection in index.scss) so every
+   section page shares the same teal gradient hero. */
 
 /* Section Padding */
 .section-padding {
