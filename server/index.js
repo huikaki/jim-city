@@ -59,25 +59,19 @@ mongoose.connection.on('disconnected', () => {
 
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+app.use(express.json({ limit: '8mb' }));
+app.use('/uploads', express.static('uploads')); // still serves any legacy files
 
-// Create uploads directory if it doesn't exist
-if (!fs.existsSync('uploads')) {
-    fs.mkdirSync('uploads');
-}
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
+// Configure multer to keep the upload in memory, then store it as a base64
+// data URI in MongoDB. This keeps photos portable and consistent with the
+// Vercel serverless functions (Vercel's filesystem is ephemeral/read-only).
+const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: 4 * 1024 * 1024 } // 4 MB
 });
 
-const upload = multer({ storage });
+const fileToDataUri = (file) =>
+    file ? `data:${file.mimetype};base64,${file.buffer.toString('base64')}` : null;
 
 let companyInfo = {
     name: 'Premium Maid Services',
@@ -221,7 +215,7 @@ app.post('/api/maids/apply', upload.single('profilePhoto'), async (req, res) => 
             numberOfBrothers: req.body.numberOfBrothers ? parseInt(req.body.numberOfBrothers) : undefined,
             numberOfSisters: req.body.numberOfSisters ? parseInt(req.body.numberOfSisters) : undefined,
             dateOfBirth: req.body.dateOfBirth ? new Date(req.body.dateOfBirth) : undefined,
-            profilePhoto: req.file ? `/uploads/${req.file.filename}` : null,
+            profilePhoto: fileToDataUri(req.file),
             status: 'pending' // Force pending status for public applications
         };
 
@@ -254,7 +248,7 @@ app.post('/api/maids', auth, upload.single('profilePhoto'), async (req, res) => 
             numberOfBrothers: req.body.numberOfBrothers ? parseInt(req.body.numberOfBrothers) : undefined,
             numberOfSisters: req.body.numberOfSisters ? parseInt(req.body.numberOfSisters) : undefined,
             dateOfBirth: req.body.dateOfBirth ? new Date(req.body.dateOfBirth) : undefined,
-            profilePhoto: req.file ? `/uploads/${req.file.filename}` : null
+            profilePhoto: fileToDataUri(req.file)
         };
 
         const maid = new Maid(maidData);
@@ -303,7 +297,7 @@ app.put('/api/maids/:id', auth, upload.single('profilePhoto'), async (req, res) 
             updateData.workExperience = parseInt(req.body.workExperience);
         }
         if (req.file) {
-            updateData.profilePhoto = `/uploads/${req.file.filename}`;
+            updateData.profilePhoto = fileToDataUri(req.file);
         }
 
         const maid = await Maid.findByIdAndUpdate(req.params.id, updateData, { new: true });
@@ -388,26 +382,31 @@ app.get('/api/maids/:id/pdf', async (req, res) => {
         let currentY = 110;
 
         // Profile Image Section
-        if (maid.profilePhoto) {
-            try {
-                const imagePath = path.join(__dirname, maid.profilePhoto);
-                if (fs.existsSync(imagePath)) {
-                    doc.image(imagePath, 450, currentY, { width: 100, height: 120, fit: [100, 120] });
-                } else {
-                    // Draw placeholder rectangle if image file doesn't exist
-                    doc.rect(450, currentY, 100, 120).stroke('#cccccc');
-                    doc.fontSize(10).fillColor('#666666').text('No Image', 475, currentY + 55);
-                }
-            } catch (imageError) {
-                console.log('Error loading profile image:', imageError);
-                // Draw placeholder rectangle if image fails
-                doc.rect(450, currentY, 100, 120).stroke('#cccccc');
-                doc.fontSize(10).fillColor('#666666').text('No Image', 475, currentY + 55);
-            }
-        } else {
-            // Draw placeholder rectangle
+        const drawNoImage = () => {
             doc.rect(450, currentY, 100, 120).stroke('#cccccc');
             doc.fontSize(10).fillColor('#666666').text('No Image', 475, currentY + 55);
+        };
+        // profilePhoto is a base64 data URI; decode it to a Buffer for PDFKit.
+        // (Legacy "/uploads/..." disk paths fall back to a placeholder.)
+        const dataUriMatch = typeof maid.profilePhoto === 'string'
+            ? maid.profilePhoto.match(/^data:.*?;base64,(.*)$/)
+            : null;
+        if (dataUriMatch) {
+            try {
+                const imgBuffer = Buffer.from(dataUriMatch[1], 'base64');
+                doc.image(imgBuffer, 450, currentY, { width: 100, height: 120, fit: [100, 120] });
+            } catch (imageError) {
+                console.log('Error loading profile image:', imageError);
+                drawNoImage();
+            }
+        } else if (maid.profilePhoto && fs.existsSync(path.join(__dirname, maid.profilePhoto))) {
+            try {
+                doc.image(path.join(__dirname, maid.profilePhoto), 450, currentY, { width: 100, height: 120, fit: [100, 120] });
+            } catch (imageError) {
+                drawNoImage();
+            }
+        } else {
+            drawNoImage();
         }
 
         // Personal Information Section (Left Column)
