@@ -9,3 +9,6 @@ server/.env
 # Local tooling
 .claude/
 .DS_Store
+
+# Build output (Vercel rebuilds this from source)
+client/build/
