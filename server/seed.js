@@ -703,7 +703,13 @@ async function seedDatabase() {
     console.log('✅ Admin user created: username=admin, password=admin123');
     
     console.log('👥 Inserting sample maids...');
-    const insertedMaids = await Maid.insertMany(sampleMaids);
+    // Ensure required contact fields exist for every sample record
+    const maidsToInsert = sampleMaids.map((maid, i) => ({
+      contactNumber: maid.contactNumber || `+852 5${String(1000000 + i).slice(-7)}`,
+      email: maid.email || `${(maid.name || 'maid').toLowerCase().replace(/[^a-z]+/g, '.')}@example.com`,
+      ...maid
+    }));
+    const insertedMaids = await Maid.insertMany(maidsToInsert);
     console.log(`✅ ${insertedMaids.length} sample maids inserted successfully`);
     
     // Show some sample maid IDs
