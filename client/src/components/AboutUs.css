@@ -5,16 +5,19 @@
 
 /* Banner Section */
 .bannerSection {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--brand-primary) 0%, rgba(var(--bs-link-color-rgb), 0.78) 100%);
   min-height: 300px;
   display: flex;
   align-items: center;
   color: white;
 }
 
-.sub-banner {
+/* Keep the banner a single clean teal block (override the global
+   .sub-banner teal stripe so it doesn't clash inside the banner). */
+.about-us-page .sub-banner {
   width: 100%;
   height: 100%;
+  background: transparent !important;
   display: flex;
   align-items: center;
 }
@@ -133,7 +136,7 @@
 
 /* Text Colors */
 .text-primary {
-  color: #0d6efd !important;
+  color: var(--brand-primary) !important;
 }
 
 /* Spacing */

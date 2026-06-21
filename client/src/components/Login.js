@@ -35,74 +35,77 @@ function Login({ onLogin }) {
   };
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      minHeight: '60vh' 
-    }}>
-      <div className="card" style={{ width: '400px', maxWidth: '90%' }}>
-        <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Admin Login</h2>
-        
-        {error && (
-          <div style={{ 
-            background: '#fee', 
-            color: '#c33', 
-            padding: '1rem', 
-            borderRadius: '4px', 
-            marginBottom: '1rem',
-            textAlign: 'center'
-          }}>
-            {error}
-          </div>
-        )}
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '70vh' }}>
+      <div className="card auth-card border-0">
+        <div className="auth-card-header">
+          <i className="bi bi-shield-lock-fill d-block mb-2"></i>
+          <h2 className="h4 fw-bold mb-1">Admin Login</h2>
+          <p className="mb-0 small opacity-75">管理員登入</p>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              value={credentials.username}
-              onChange={handleChange}
-              required
+        <div className="auth-card-body">
+          {error && (
+            <div className="alert alert-danger d-flex align-items-center py-2 mb-3" role="alert">
+              <i className="bi bi-exclamation-circle me-2"></i>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label">Username</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white"><i className="bi bi-person"></i></span>
+                <input
+                  type="text"
+                  name="username"
+                  className="form-control"
+                  value={credentials.username}
+                  onChange={handleChange}
+                  placeholder="Enter username"
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Password</label>
+              <div className="input-group">
+                <span className="input-group-text bg-white"><i className="bi bi-lock"></i></span>
+                <input
+                  type="password"
+                  name="password"
+                  className="form-control"
+                  value={credentials.password}
+                  onChange={handleChange}
+                  placeholder="Enter password"
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-100 mt-2"
               disabled={loading}
-            />
+            >
+              {loading ? (
+                <><span className="spinner-border spinner-border-sm me-2" role="status"></span>Logging in...</>
+              ) : (
+                <><i className="bi bi-box-arrow-in-right me-2"></i>Login</>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-4 p-3 rounded-3 text-muted small" style={{ background: 'var(--brand-primary-tint)' }}>
+            <strong className="d-block mb-1" style={{ color: 'var(--brand-primary)' }}>
+              <i className="bi bi-info-circle me-1"></i>Demo Credentials
+            </strong>
+            Username: admin<br />
+            Password: admin123
           </div>
-
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={credentials.password}
-              onChange={handleChange}
-              required
-              disabled={loading}
-            />
-          </div>
-
-          <button 
-            type="submit" 
-            className="btn" 
-            style={{ width: '100%', marginTop: '1rem' }}
-            disabled={loading}
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <div style={{ 
-          marginTop: '2rem', 
-          padding: '1rem', 
-          background: '#f8f9fa', 
-          borderRadius: '4px',
-          fontSize: '0.9rem',
-          color: '#666'
-        }}>
-          <strong>Demo Credentials:</strong><br />
-          Username: admin<br />
-          Password: admin123
         </div>
       </div>
     </div>

@@ -271,11 +271,13 @@ function MaidSearch() {
 
   return (
     <div className="container-fluid">
-      <div className="card mb-4">
+      <div className="card filter-card mb-4">
         <div className="card-header d-flex justify-content-between align-items-center">
-          <h3 className="card-title mb-0">Filter Maids</h3>
+          <h3 className="card-title mb-0">
+            <i className="bi bi-sliders2 me-2"></i>Filter Maids
+          </h3>
           <button
-            className="btn btn-outline-primary btn-sm"
+            className="btn btn-toggle-advanced btn-sm"
             onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
           >
             <i className={`bi bi-chevron-${showAdvancedFilters ? 'up' : 'down'} me-1`}></i>
@@ -431,9 +433,12 @@ function MaidSearch() {
         </div>
       </div>
 
-      <div className="card">
+      <div className="card results-card">
         <div className="card-header d-flex justify-content-between align-items-center">
-          <h2 className="card-title mb-0">Available Maids ({filteredMaids.length})</h2>
+          <h2 className="card-title mb-0">
+            <i className="bi bi-people-fill me-2"></i>Available Maids
+            <span className="results-count ms-2">{filteredMaids.length}</span>
+          </h2>
           {filteredMaids.length > 0 && (
             <small className="text-muted">
               Showing {indexOfFirstMaid + 1}-{Math.min(indexOfLastMaid, filteredMaids.length)} of {filteredMaids.length} maids
@@ -452,31 +457,31 @@ function MaidSearch() {
               <div className="row g-4">
                 {currentMaids.map(maid => (
                   <div key={maid._id} className="col-md-6 col-lg-4">
-                    <div className="card h-100 shadow-sm">
+                    <div className="card maid-card h-100">
                       {maid.profilePhoto ? (
                         <img
                           src={maid.profilePhoto}
                           alt={maid.name}
-                          className="card-img-top"
+                          className="card-img-top maid-card-img"
                           style={{ height: '200px', objectFit: 'cover' }}
                         />
                       ) : (
-                        <div className="card-img-top bg-light d-flex align-items-center justify-content-center text-muted" style={{ height: '200px' }}>
+                        <div className="card-img-top maid-card-img maid-card-img--placeholder d-flex align-items-center justify-content-center" style={{ height: '200px' }}>
                           <i className="bi bi-person-circle display-4"></i>
                         </div>
                       )}
 
                       <div className="card-body d-flex flex-column">
-                        <h5 className="card-title">{maid.name}</h5>
-                        <div className="mb-3">
-                          <small className="text-muted d-block"><strong>{t('maid.id')}:</strong> {maid.maidId}</small>
-                          <small className="text-muted d-block"><strong>{t('maid.nationality')}:</strong> {maid.nationality}</small>
-                          <small className="text-muted d-block"><strong>{t('maid.experience')}:</strong> {maid.workExperience} {t('maid.years')}</small>
+                        <h5 className="card-title maid-card-name">{maid.name}</h5>
+                        <div className="mb-3 maid-card-meta">
+                          <small className="d-block"><strong>{t('maid.id')}:</strong> {maid.maidId}</small>
+                          <small className="d-block"><strong>{t('maid.nationality')}:</strong> {maid.nationality}</small>
+                          <small className="d-block"><strong>{t('maid.experience')}:</strong> {maid.workExperience} {t('maid.years')}</small>
                         </div>
 
                         <div className="mb-3">
                           {maid.skills.filter(skill => skill.value).map((skill, index) => (
-                            <span key={index} className="badge bg-info me-1 mb-1">
+                            <span key={index} className="badge skill-badge me-1 mb-1">
                               {t(`maid.${skill.skill}`) || skill.skill}
                             </span>
                           ))}
@@ -567,13 +572,13 @@ function MaidSearch() {
       {showMaidModal && selectedMaid && (
         <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={closeMaidModal}>
           <div className="modal-dialog modal-lg modal-dialog-scrollable" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-content">
+            <div className="modal-content maid-modal">
               <div className="modal-header">
                 <h5 className="modal-title">
                   <i className="bi bi-person-circle me-2"></i>
-                  {selectedMaid.name} - {selectedMaid.maidId}
+                  {selectedMaid.name} <span className="modal-maid-id">{selectedMaid.maidId}</span>
                 </h5>
-                <button type="button" className="btn-close" onClick={closeMaidModal}></button>
+                <button type="button" className="btn-close btn-close-white" onClick={closeMaidModal}></button>
               </div>
               <div className="modal-body">
                 <div className="row">

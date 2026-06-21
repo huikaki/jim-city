@@ -3,13 +3,132 @@
   position: relative;
 }
 
+/* z-index fix: lift the whole open dropdown (trigger + menu) above
+   sibling filter columns, the results card and the sticky header. */
+.multi-select-dropdown.open {
+  z-index: 1080;
+}
+
+.multi-select-dropdown .form-control {
+  cursor: pointer;
+  border-radius: 0.625rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
 .multi-select-dropdown .form-control:hover {
-  border-color: #86b7fe;
+  border-color: var(--brand-primary);
 }
 
 .multi-select-dropdown .form-control.border-primary {
-  border-color: #0d6efd !important;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 0.2rem var(--brand-primary-soft);
+}
+
+.multi-select-dropdown .dropdown-caret {
+  transition: transform 0.2s ease;
+  color: var(--brand-primary);
+  font-size: 0.85rem;
+}
+
+/* ============================================================
+   Modern filter card
+   ============================================================ */
+.filter-card {
+  position: relative;
+  /* Keep the filter panel (and any open dropdown inside it) stacked above
+     the results card below. Required because the global `.card:hover`
+     transform turns this card into a stacking context, which would
+     otherwise trap the dropdown's z-index. */
+  z-index: 10;
+  border: none;
+  border-radius: 1rem;
+  overflow: visible; /* never clip an open dropdown */
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.06);
+}
+
+/* The filter panel is a container, not a clickable card – don't let the
+   global card-hover lift animation apply (it creates a stacking context
+   that traps open dropdowns and also looks wrong on a full-width panel). */
+.card.filter-card:hover {
+  transform: none;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.06);
+}
+
+.filter-card .card-header {
+  background: transparent;
+  border-bottom: 1px solid var(--bs-border-color-translucent, #eef0f2);
+  padding: 1.1rem 1.4rem;
+}
+
+.filter-card .card-header .card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  letter-spacing: -0.01em;
+}
+
+.filter-card .card-body {
+  padding: 1.4rem;
+}
+
+/* Toggle advanced-filters pill */
+.btn-toggle-advanced {
+  border: 1px solid var(--brand-primary);
+  color: var(--brand-primary);
+  background: transparent;
+  border-radius: 2rem;
+  padding: 0.35rem 1rem;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+.btn-toggle-advanced:hover {
+  background: var(--brand-primary);
+  color: #fff;
+}
+
+/* Field labels */
+.filter-card .form-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6c757d;
+  margin-bottom: 0.35rem;
+}
+
+/* Inputs & selects */
+.filter-card .form-control,
+.filter-card .form-select {
+  border-radius: 0.625rem;
+  border-color: #e3e6ea;
+  background-color: #f8fafb;
+  padding: 0.55rem 0.85rem;
+  min-height: 44px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.filter-card .form-control:focus,
+.filter-card .form-select:focus {
+  background-color: #fff;
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 0.2rem var(--brand-primary-soft);
+}
+
+.filter-card .form-control::placeholder {
+  color: #adb5bd;
+}
+
+/* Advanced row separator */
+.filter-card .border-top {
+  border-top-color: #eef0f2 !important;
+}
+
+/* Action buttons row */
+.filter-card .btn {
+  border-radius: 0.625rem;
+  padding: 0.55rem 1.25rem;
+  font-weight: 600;
 }
 
 .multi-select-dropdown .dropdown-menu {
@@ -32,12 +151,128 @@
 }
 
 .multi-select-dropdown .dropdown-item.active {
-  background-color: #e7f3ff;
-  color: #0d6efd;
+  background-color: var(--brand-primary-tint);
+  color: var(--brand-primary);
 }
 
 .multi-select-dropdown .form-check-input {
   margin-top: 0;
+}
+
+/* ============================================================
+   Modern results card + maid cards
+   ============================================================ */
+.results-card {
+  border: none;
+  border-radius: 1rem;
+  overflow: visible;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.06);
+}
+
+.results-card .card-header {
+  background: transparent;
+  border-bottom: 1px solid #eef0f2;
+  padding: 1.1rem 1.4rem;
+}
+
+.results-card .card-header .card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  letter-spacing: -0.01em;
+}
+
+/* Count pill next to the heading */
+.results-count {
+  display: inline-block;
+  min-width: 1.6rem;
+  padding: 0.1rem 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  background: var(--brand-primary);
+  border-radius: 2rem;
+  vertical-align: middle;
+}
+
+.results-card .card-body {
+  padding: 1.4rem;
+}
+
+/* Maid card */
+.maid-card {
+  border: 1px solid #eef0f2;
+  border-radius: 0.875rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.maid-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--brand-primary-soft);
+  box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.12);
+}
+
+.maid-card-img {
+  border-bottom: 1px solid #eef0f2;
+}
+
+.maid-card-img--placeholder {
+  background: linear-gradient(135deg, var(--brand-primary-tint) 0%, #f3f5f7 100%);
+  color: var(--brand-primary);
+}
+
+.maid-card-name {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #1f2a37;
+  margin-bottom: 0.5rem;
+}
+
+.maid-card-meta small {
+  color: #6c757d;
+  line-height: 1.6;
+}
+
+.maid-card-meta strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+/* Skill chips */
+.skill-badge {
+  background: var(--brand-primary-tint) !important;
+  color: var(--brand-primary) !important;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 2rem;
+}
+
+/* Card action buttons */
+.maid-card .btn {
+  border-radius: 0.625rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+}
+
+.maid-card .btn-info {
+  background: var(--brand-primary-tint);
+  border-color: transparent;
+  color: var(--brand-primary);
+}
+
+.maid-card .btn-info:hover {
+  background: var(--brand-primary);
+  color: #fff;
+}
+
+/* Empty state */
+.results-card .bi-search.display-1 {
+  color: var(--brand-primary-soft) !important;
 }
 
 /* Responsive adjustments */
@@ -109,15 +344,127 @@
   padding-top: 1rem;
 }
 
+/* ============================================================
+   Modern maid detail modal
+   ============================================================ */
+.maid-modal {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.25);
+}
+
+.maid-modal .modal-header {
+  background: linear-gradient(135deg, var(--brand-primary) 0%, rgba(var(--bs-link-color-rgb), 0.82) 100%);
+  border-bottom: none;
+  padding: 1.1rem 1.4rem;
+}
+
+.maid-modal .modal-title {
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.modal-maid-id {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: 2rem;
+  vertical-align: middle;
+}
+
+.maid-modal .modal-body {
+  padding: 1.5rem;
+  background: #fff;
+}
+
+/* Section headings */
+.maid-modal .modal-body h6 {
+  color: var(--brand-primary) !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px solid #eef0f2;
+  padding-bottom: 0.55rem;
+}
+
+/* Info field labels / values */
+.maid-modal .modal-body strong {
+  color: #495057;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* Profile photo / placeholder */
+.maid-modal .modal-body .bg-light.rounded {
+  background: linear-gradient(135deg, var(--brand-primary-tint) 0%, #f3f5f7 100%) !important;
+  color: var(--brand-primary) !important;
+  border-radius: 0.875rem !important;
+}
+
+/* Language tiles & light info cards */
+.maid-modal .modal-body .border.rounded {
+  border-color: #eef0f2 !important;
+  border-radius: 0.75rem !important;
+  background: #f8fafb;
+}
+
+.maid-modal .modal-body .card.bg-light {
+  background: #f8fafb !important;
+  border-radius: 0.75rem !important;
+}
+
+/* Badges: rounded pills, keep semantic colours but soften neutrals */
+.maid-modal .badge {
+  border-radius: 2rem;
+  font-weight: 600;
+  padding: 0.4rem 0.7rem;
+}
+
+.maid-modal .badge.bg-info {
+  background: var(--brand-primary-tint) !important;
+  color: var(--brand-primary) !important;
+}
+
+/* Accordion (previous employment) */
+.maid-modal .accordion-item {
+  border: 1px solid #eef0f2;
+  border-radius: 0.75rem !important;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.maid-modal .accordion-button {
+  border-radius: 0 !important;
+}
+
+/* Footer */
+.maid-modal .modal-footer {
+  border-top: 1px solid #eef0f2;
+  padding: 1rem 1.4rem;
+}
+
+.maid-modal .modal-footer .btn {
+  border-radius: 0.625rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+}
+
 /* Accordion styling in modal */
 .accordion-button:not(.collapsed) {
-  background-color: #f8f9fa;
-  color: #0d6efd;
+  background-color: var(--brand-primary-tint);
+  color: var(--brand-primary);
 }
 
 .accordion-button:focus {
   box-shadow: none;
-  border-color: #86b7fe;
+  border-color: var(--brand-primary);
 }
 
 /* Badge styling */

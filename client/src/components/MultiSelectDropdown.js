@@ -59,8 +59,8 @@ function MultiSelectDropdown({
   };
 
   return (
-    <div className="multi-select-dropdown" ref={dropdownRef}>
-      <div 
+    <div className={`multi-select-dropdown ${isOpen ? 'open' : ''}`} ref={dropdownRef}>
+      <div
         className={`form-control d-flex justify-content-between align-items-center ${isOpen ? 'border-primary' : ''}`}
         onClick={() => setIsOpen(!isOpen)}
         style={{ cursor: 'pointer', minHeight: '38px' }}
@@ -68,20 +68,20 @@ function MultiSelectDropdown({
         <span className={selectedValues.length === 0 ? 'text-muted' : ''}>
           {getDisplayText()}
         </span>
-        <i className={`bi bi-chevron-${isOpen ? 'up' : 'down'}`}></i>
+        <i className={`bi bi-chevron-${isOpen ? 'up' : 'down'} dropdown-caret`}></i>
       </div>
 
       {isOpen && (
-        <div 
-          className="dropdown-menu show w-100 mt-1 p-0" 
-          style={{ 
-            position: 'absolute', 
-            zIndex: 1050,
+        <div
+          className="dropdown-menu show w-100 mt-1 p-0"
+          style={{
+            position: 'absolute',
+            zIndex: 1080,
             maxHeight: '300px',
             overflowY: 'auto',
-            border: '1px solid #ced4da',
-            borderRadius: '0.375rem',
-            boxShadow: '0 0.5rem 1rem rgba(0, 0, 0, 0.15)'
+            border: '1px solid var(--bs-border-color)',
+            borderRadius: '0.75rem',
+            boxShadow: '0 0.75rem 2rem rgba(0, 0, 0, 0.16)'
           }}
         >
           {/* Search input */}
