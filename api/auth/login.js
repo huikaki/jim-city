@@ -22,15 +22,11 @@ module.exports = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    console.log('Login attempt:', { username, password });
-
     // Check if user exists
     let user = await User.findOne({ username });
-    console.log('Found user:', user);
-    
-    // If no users exist, create default admin
+
+    // Bootstrap a default admin the first time if none exists
     if (!user) {
-      console.log('No user found, creating default admin');
       const hashedPassword = await bcrypt.hash('admin123', 10);
       const defaultUser = new User({
         username: 'admin',
@@ -38,20 +34,16 @@ module.exports = async (req, res) => {
         role: 'admin'
       });
       await defaultUser.save();
-      console.log('Default admin created with hashed password');
-      
+
       if (username === 'admin' && password === 'admin123') {
         user = defaultUser;
       }
     }
 
-    console.log('Final user check:', { user: user ? user.username : 'none' });
-
     // Compare password using bcrypt
     const isPasswordValid = user && await bcrypt.compare(password, user.password);
-    
+
     if (!user || !isPasswordValid) {
-      console.log('Authentication failed');
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 

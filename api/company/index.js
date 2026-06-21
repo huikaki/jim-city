@@ -1,19 +1,12 @@
 const { connectDB } = require('../_lib/db');
 const { Company } = require('../_lib/models');
+const { verifyToken, applyCors } = require('../_lib/auth');
 
 module.exports = async (req, res) => {
-  await connectDB();
-
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  if (applyCors(req, res, 'GET, PUT, OPTIONS')) return;
 
   try {
+    await connectDB();
     if (req.method === 'GET') {
       let company = await Company.findOne({});
       
@@ -34,6 +27,9 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === 'PUT') {
+      if (!verifyToken(req)) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
       const companyData = req.body;
       let company = await Company.findOne({});
       
