@@ -861,27 +861,6 @@ function AdminPanel() {
     document.body.removeChild(link);
   };
 
-  const sendWhatsAppMessage = (maidId, maidName) => {
-    if (!companyInfo || !companyInfo.contact || !companyInfo.contact.phone) {
-      alert('Company WhatsApp number not available. Please contact the administrator.');
-      return;
-    }
-
-    // Clean phone number (remove spaces, dashes, and non-numeric characters except +)
-    const phoneNumber = companyInfo.contact.phone.replace(/[^\d+]/g, '');
-
-    // Create WhatsApp message
-    const message = `Hi! I'm interested in maid ${maidId} - ${maidName}. Could you please provide more information about her availability and services?`;
-
-    // Encode the message for URL
-    const encodedMessage = encodeURIComponent(message);
-
-    // Create WhatsApp URL
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-    // Open WhatsApp in new tab
-    window.open(whatsappUrl, '_blank');
-  };
 
   const openMaidModal = (maid) => {
     setSelectedMaid(maid);
@@ -892,6 +871,23 @@ function AdminPanel() {
     setSelectedMaid(null);
     setShowMaidModal(false);
     setExpandedEmployment({});
+  };
+
+  // Quick status change from the maid detail modal (saves immediately)
+  const handleQuickStatusChange = async (newStatus) => {
+    if (!selectedMaid || newStatus === selectedMaid.status) return;
+    const token = localStorage.getItem('token');
+    try {
+      const fd = new FormData();
+      fd.append('status', newStatus);
+      const res = await axios.put(`/api/maids/${selectedMaid._id}`, fd, {
+        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
+      });
+      setSelectedMaid(res.data);
+      fetchData();
+    } catch (error) {
+      alert('Failed to update status: ' + (error.response?.data?.error || error.message));
+    }
   };
 
   const toggleEmployment = (index) => {
@@ -1642,8 +1638,8 @@ function AdminPanel() {
                               />
                             </div>
                             <div className="col-md-6">
-                              <div className="d-flex gap-3">
-                                {['Poor', 'Fair', 'Good'].map(level => (
+                              <div className="d-flex flex-wrap gap-2 align-items-center">
+                                {['Poor', 'Fair', 'Good', 'Excellent', 'Native'].map(level => (
                                   <div key={level} className="form-check">
                                     <input
                                       className="form-check-input"
@@ -2154,6 +2150,18 @@ function AdminPanel() {
                         {selectedMaid.status.toUpperCase()}
                       </span>
                     </div>
+                    <div className="mt-2">
+                      <label className="form-label small text-muted mb-1">Change Status</label>
+                      <select
+                        className="form-select form-select-sm"
+                        value={selectedMaid.status}
+                        onChange={(e) => handleQuickStatusChange(e.target.value)}
+                      >
+                        <option value="available">Available</option>
+                        <option value="pending">Pending</option>
+                        <option value="not available">Not Available</option>
+                      </select>
+                    </div>
                   </div>
 
                   {/* Personal Information */}
@@ -2470,14 +2478,6 @@ function AdminPanel() {
                 >
                   <i className="bi bi-download me-1"></i>
                   Download PDF
-                </button>
-                <button
-                  onClick={() => sendWhatsAppMessage(selectedMaid.maidId, selectedMaid.name)}
-                  className="btn btn-success"
-                  disabled={!companyInfo || !companyInfo.contact || !companyInfo.contact.phone}
-                >
-                  <i className="bi bi-whatsapp me-1"></i>
-                  Contact via WhatsApp
                 </button>
                 <button
                   onClick={() => handleEditMaid(selectedMaid)}
