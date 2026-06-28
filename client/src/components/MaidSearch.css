@@ -164,6 +164,15 @@
   opacity: 0.5;
 }
 
+/* Advanced filters: hidden on desktop until toggled */
+.advanced-filters {
+  display: none;
+}
+
+.advanced-filters.open {
+  display: flex;
+}
+
 /* ---- Mobile: collapse the whole filter into an accordion ---- */
 .filter-accordion-caret {
   color: var(--brand-primary);
@@ -184,6 +193,11 @@
 
   .filter-card.filters-open .card-body {
     display: block;
+  }
+
+  /* On mobile the advanced filters are always shown (no extra toggle) */
+  .advanced-filters {
+    display: flex !important;
   }
 }
 

@@ -289,7 +289,8 @@ function MaidSearch() {
         </div>
         <div className="card-body">
           {/* Advanced filters toggle */}
-          <div className="d-flex justify-content-end mb-3">
+          {/* Advanced filters toggle — desktop only (mobile shows them inline) */}
+          <div className="d-none d-md-flex justify-content-end mb-3">
             <button
               className="btn btn-toggle-advanced btn-sm"
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
@@ -300,19 +301,7 @@ function MaidSearch() {
           </div>
           {/* Quick Filters Row */}
           <div className="row g-3 mb-3">
-            <div className="col-md-4">
-              <label className="form-label">Maid Number</label>
-              <input
-                type="text"
-                name="maidNumber"
-                className="form-control"
-                value={filters.maidNumber}
-                onChange={handleFilterChange}
-                placeholder="Enter maid ID"
-              />
-            </div>
-
-            <div className="col-md-4">
+            <div className="col-md-6">
               <label className="form-label">{t('maid.skills')}</label>
               <MultiSelectDropdown
                 options={availableOptions.skills}
@@ -324,7 +313,7 @@ function MaidSearch() {
               />
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-6">
               <label className="form-label">{t('maid.languages')}</label>
               <MultiSelectDropdown
                 options={availableOptions.languages}
@@ -337,9 +326,9 @@ function MaidSearch() {
             </div>
           </div>
 
-          {/* Advanced Filters */}
-          {showAdvancedFilters && (
-            <div className="row g-3 border-top pt-3">
+          {/* Advanced Filters — always in DOM; visibility via CSS
+              (desktop: toggled by showAdvancedFilters; mobile: always shown) */}
+          <div className={`row g-3 border-top pt-3 advanced-filters ${showAdvancedFilters ? 'open' : ''}`}>
               <div className="col-md-6 col-lg-4">
                 <label className="form-label">Education</label>
                 <MultiSelectDropdown
@@ -414,7 +403,6 @@ function MaidSearch() {
                 />
               </div>
             </div>
-          )}
 
           {/* Action Buttons */}
           <div className="d-flex gap-2 mt-3">
