@@ -695,12 +695,16 @@ async function seedDatabase() {
     await User.deleteMany({});
     
     console.log('👤 Creating admin user...');
+    // Use ADMIN_PASSWORD from the environment, or generate a strong random one.
+    const adminPassword = process.env.ADMIN_PASSWORD ||
+      (require('crypto').randomBytes(9).toString('base64').replace(/[+/=]/g, '').slice(0, 12) + '!7Aq');
     const adminUser = new User({
       username: 'admin',
-      password: 'admin123'
+      password: adminPassword
     });
     await adminUser.save();
-    console.log('✅ Admin user created: username=admin, password=admin123');
+    console.log(`✅ Admin user created: username=admin, password=${adminPassword}`);
+    console.log('   (set ADMIN_PASSWORD env var to choose your own; store this safely)');
     
     console.log('👥 Inserting sample maids...');
     // Ensure required contact fields exist for every sample record
@@ -719,7 +723,7 @@ async function seedDatabase() {
     });
     
     console.log('\n🎉 Database seeded successfully!');
-    console.log('🔑 Admin Login: username=admin, password=admin123');
+    console.log('🔑 Admin Login: username=admin (password shown above)');
     console.log('🌐 Start the app with: npm run dev');
     
     process.exit(0);

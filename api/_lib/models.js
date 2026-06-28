@@ -81,7 +81,9 @@ maidSchema.pre('validate', async function (next) {
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['admin', 'user'], default: 'admin' }
+  role: { type: String, enum: ['admin', 'user'], default: 'admin' },
+  failedAttempts: { type: Number, default: 0 },
+  lockUntil: { type: Date, default: null }
 }, { timestamps: true });
 
 // Company schema

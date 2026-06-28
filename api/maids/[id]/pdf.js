@@ -1,7 +1,7 @@
 const PDFDocument = require('pdfkit');
 const { connectDB } = require('../../_lib/db');
 const { Maid } = require('../../_lib/models');
-const { applyCors } = require('../../_lib/auth');
+const { applyCors, verifyToken } = require('../../_lib/auth');
 
 // Decode a base64 data URI (data:image/...;base64,xxxx) into a Buffer.
 function dataUriToBuffer(uri) {
@@ -21,6 +21,11 @@ module.exports = async (req, res) => {
 
     const maid = await Maid.findById(id);
     if (!maid) return res.status(404).json({ error: 'Maid not found' });
+
+    const isAdmin = !!verifyToken(req);
+    if (!isAdmin && maid.status !== 'available') {
+      return res.status(404).json({ error: 'Maid not found' });
+    }
 
     const doc = new PDFDocument({ margin: 50 });
     res.setHeader('Content-Type', 'application/pdf');
@@ -73,8 +78,9 @@ module.exports = async (req, res) => {
     if (maid.numberOfChildren) row('Children:', maid.numberOfChildren);
     if (maid.numberOfBrothers !== undefined) row('Brothers:', maid.numberOfBrothers);
     if (maid.numberOfSisters !== undefined) row('Sisters:', maid.numberOfSisters);
-    if (maid.contactNumber) row('Contact:', maid.contactNumber);
-    if (maid.email) row('Email:', maid.email);
+    // Personal contact details only in the admin-authenticated PDF
+    if (isAdmin && maid.contactNumber) row('Contact:', maid.contactNumber);
+    if (isAdmin && maid.email) row('Email:', maid.email);
 
     currentY += 15;
 

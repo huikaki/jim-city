@@ -22,29 +22,38 @@ module.exports = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Check if user exists
-    let user = await User.findOne({ username });
+    const MAX_ATTEMPTS = 5;
+    const LOCK_MINUTES = 15;
 
-    // Bootstrap a default admin the first time if none exists
-    if (!user) {
-      const hashedPassword = await bcrypt.hash('admin123', 10);
-      const defaultUser = new User({
-        username: 'admin',
-        password: hashedPassword,
-        role: 'admin'
-      });
-      await defaultUser.save();
+    const user = await User.findOne({ username });
 
-      if (username === 'admin' && password === 'admin123') {
-        user = defaultUser;
-      }
+    // Account lockout after too many failed attempts (brute-force protection)
+    if (user && user.lockUntil && user.lockUntil > new Date()) {
+      return res.status(429).json({ error: 'Account temporarily locked. Try again later.' });
     }
 
-    // Compare password using bcrypt
-    const isPasswordValid = user && await bcrypt.compare(password, user.password);
+    // Compare password using bcrypt (always run a comparison to avoid
+    // user-enumeration via timing differences)
+    const hash = user ? user.password : '$2a$10$invalidinvalidinvalidinvalidinvalidinvalidinvalidinva';
+    const isPasswordValid = await bcrypt.compare(password || '', hash);
 
     if (!user || !isPasswordValid) {
+      if (user) {
+        user.failedAttempts = (user.failedAttempts || 0) + 1;
+        if (user.failedAttempts >= MAX_ATTEMPTS) {
+          user.lockUntil = new Date(Date.now() + LOCK_MINUTES * 60 * 1000);
+          user.failedAttempts = 0;
+        }
+        await user.save();
+      }
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Successful login — clear any failure counters
+    if (user.failedAttempts || user.lockUntil) {
+      user.failedAttempts = 0;
+      user.lockUntil = null;
+      await user.save();
     }
 
     // Generate JWT token

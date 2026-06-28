@@ -2,6 +2,7 @@ const { connectDB } = require('../../_lib/db');
 const { Maid } = require('../../_lib/models');
 const { verifyToken, applyCors } = require('../../_lib/auth');
 const { parseForm } = require('../../_lib/parseForm');
+const { sanitizeMaid } = require('../../_lib/sanitize');
 
 module.exports = async (req, res) => {
   if (applyCors(req, res, 'GET, PUT, DELETE, OPTIONS')) return;
@@ -14,7 +15,12 @@ module.exports = async (req, res) => {
     if (req.method === 'GET') {
       const maid = await Maid.findById(id);
       if (!maid) return res.status(404).json({ error: 'Maid not found' });
-      return res.status(200).json(maid);
+      const isAdmin = !!verifyToken(req);
+      // Public callers can't see non-available maids or sensitive fields.
+      if (!isAdmin && maid.status !== 'available') {
+        return res.status(404).json({ error: 'Maid not found' });
+      }
+      return res.status(200).json(isAdmin ? maid : sanitizeMaid(maid));
     }
 
     if (req.method === 'PUT') {

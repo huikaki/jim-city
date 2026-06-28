@@ -98,14 +98,6 @@ function Login({ onLogin }) {
               )}
             </button>
           </form>
-
-          <div className="mt-4 p-3 rounded-3 text-muted small" style={{ background: 'var(--brand-primary-tint)' }}>
-            <strong className="d-block mb-1" style={{ color: 'var(--brand-primary)' }}>
-              <i className="bi bi-info-circle me-1"></i>Demo Credentials
-            </strong>
-            Username: admin<br />
-            Password: admin123
-          </div>
         </div>
       </div>
     </div>

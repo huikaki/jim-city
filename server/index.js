@@ -13,6 +13,21 @@ const Maid = require('./models/Maid');
 const User = require('./models/User');
 const { auth, JWT_SECRET } = require('./middleware/auth');
 
+// Optional auth: returns true if a valid admin token is present (no error if absent)
+const isAdminRequest = (req) => {
+    const header = req.headers.authorization || '';
+    if (!header.startsWith('Bearer ')) return false;
+    try { jwt.verify(header.substring(7), JWT_SECRET); return true; } catch { return false; }
+};
+
+// Strip personal contact fields from a maid for public (unauthenticated) responses
+const SENSITIVE_MAID_FIELDS = ['email', 'contactNumber', 'address', 'dateOfBirth'];
+const sanitizeMaid = (maid) => {
+    const obj = maid && typeof maid.toObject === 'function' ? maid.toObject() : { ...maid };
+    SENSITIVE_MAID_FIELDS.forEach((f) => { delete obj[f]; });
+    return obj;
+};
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -150,6 +165,7 @@ app.get('/api/maids', async (req, res) => {
             });
         }
 
+        const isAdmin = isAdminRequest(req);
         const { skills, status, nationality, gender, minExperience, maxExperience } = req.query;
 
         let query = {};
@@ -159,8 +175,11 @@ app.get('/api/maids', async (req, res) => {
             query['skills.skill'] = { $in: skillsArray };
         }
 
-        if (status) {
-            query.status = status;
+        // Public callers only see available maids; admins can filter by any status
+        if (isAdmin) {
+            if (status) query.status = status;
+        } else {
+            query.status = 'available';
         }
 
         if (nationality) {
@@ -180,7 +199,7 @@ app.get('/api/maids', async (req, res) => {
         }
 
         const maids = await Maid.find(query).sort({ createdAt: -1 });
-        res.json(maids);
+        res.json(isAdmin ? maids : maids.map(sanitizeMaid));
     } catch (error) {
         console.error('Error fetching maids:', error);
         res.status(500).json({ error: 'Server error', details: error.message });
@@ -193,7 +212,11 @@ app.get('/api/maids/:id', async (req, res) => {
         if (!maid) {
             return res.status(404).json({ error: 'Maid not found' });
         }
-        res.json(maid);
+        const isAdmin = isAdminRequest(req);
+        if (!isAdmin && maid.status !== 'available') {
+            return res.status(404).json({ error: 'Maid not found' });
+        }
+        res.json(isAdmin ? maid : sanitizeMaid(maid));
     } catch (error) {
         res.status(500).json({ error: 'Server error' });
     }
@@ -365,6 +388,9 @@ app.get('/api/maids/:id/pdf', async (req, res) => {
     try {
         const maid = await Maid.findById(req.params.id);
         if (!maid) {
+            return res.status(404).json({ error: 'Maid not found' });
+        }
+        if (!isAdminRequest(req) && maid.status !== 'available') {
             return res.status(404).json({ error: 'Maid not found' });
         }
 

@@ -2,6 +2,7 @@ const { connectDB } = require('../_lib/db');
 const { Maid } = require('../_lib/models');
 const { verifyToken, applyCors } = require('../_lib/auth');
 const { parseForm } = require('../_lib/parseForm');
+const { sanitizeMaid } = require('../_lib/sanitize');
 
 module.exports = async (req, res) => {
   if (applyCors(req, res, 'GET, POST, OPTIONS')) return;
@@ -10,18 +11,25 @@ module.exports = async (req, res) => {
     await connectDB();
 
     if (req.method === 'GET') {
+      const isAdmin = !!verifyToken(req);
       const { skills, status, nationality, gender, minExperience, maxExperience } = req.query || {};
       const query = {};
 
       if (skills) query['skills.skill'] = { $in: String(skills).split(',') };
-      if (status) query.status = status;
       if (nationality) query.nationality = nationality;
       if (gender) query.gender = gender;
       if (minExperience) query.workExperience = { ...query.workExperience, $gte: parseInt(minExperience, 10) };
       if (maxExperience) query.workExperience = { ...query.workExperience, $lte: parseInt(maxExperience, 10) };
 
+      // Public callers only ever see available maids; admins can filter by any status.
+      if (isAdmin) {
+        if (status) query.status = status;
+      } else {
+        query.status = 'available';
+      }
+
       const maids = await Maid.find(query).sort({ createdAt: -1 });
-      return res.status(200).json(maids);
+      return res.status(200).json(isAdmin ? maids : maids.map(sanitizeMaid));
     }
 
     if (req.method === 'POST') {
