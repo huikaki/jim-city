@@ -278,13 +278,8 @@ function Header({ isAuthenticated, onLogout }) {
         </nav>
       </header>
 
-      {/* Floating Action Buttons */}
+      {/* Floating Action Button */}
       <div className="bottom-btn">
-        <a href="tel:+1-555-MAIDS" className="no-text-underline hoverEffect2">
-          <div className="circle-btn phone my-2">
-            <span><FontAwesomeIcon icon="phone" /></span>
-          </div>
-        </a>
         <a href="https://wa.me/15555555555" className="no-text-underline hoverEffect2" target="_blank" rel="noopener noreferrer">
           <div className="circle-btn wts">
             <span><FontAwesomeIcon icon={['fab', 'whatsapp']} /></span>

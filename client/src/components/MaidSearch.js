@@ -12,6 +12,7 @@ function MaidSearch() {
   const [currentPage, setCurrentPage] = useState(1);
   const [maidsPerPage] = useState(6);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false); // mobile accordion (always shown on desktop)
   const [companyInfo, setCompanyInfo] = useState(null);
   const [selectedMaid, setSelectedMaid] = useState(null);
   const [showMaidModal, setShowMaidModal] = useState(false);
@@ -275,20 +276,28 @@ function MaidSearch() {
 
   return (
     <div className="container-fluid">
-      <div className="card filter-card mb-4">
-        <div className="card-header d-flex justify-content-between align-items-center">
+      <div className={`card filter-card mb-4 ${filtersOpen ? 'filters-open' : ''}`}>
+        <div
+          className="card-header filter-card-header d-flex justify-content-between align-items-center"
+          onClick={() => setFiltersOpen(!filtersOpen)}
+        >
           <h3 className="card-title mb-0">
             <i className="bi bi-sliders2 me-2"></i>Filter Maids
           </h3>
-          <button
-            className="btn btn-toggle-advanced btn-sm"
-            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-          >
-            <i className={`bi bi-chevron-${showAdvancedFilters ? 'up' : 'down'} me-1`}></i>
-            {showAdvancedFilters ? 'Hide' : 'Show'} Advanced Filters
-          </button>
+          {/* Mobile-only accordion chevron */}
+          <i className={`bi bi-chevron-${filtersOpen ? 'up' : 'down'} filter-accordion-caret d-md-none`}></i>
         </div>
         <div className="card-body">
+          {/* Advanced filters toggle */}
+          <div className="d-flex justify-content-end mb-3">
+            <button
+              className="btn btn-toggle-advanced btn-sm"
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+            >
+              <i className={`bi bi-chevron-${showAdvancedFilters ? 'up' : 'down'} me-1`}></i>
+              {showAdvancedFilters ? 'Hide' : 'Show'} Advanced Filters
+            </button>
+          </div>
           {/* Quick Filters Row */}
           <div className="row g-3 mb-3">
             <div className="col-md-4">
@@ -409,13 +418,13 @@ function MaidSearch() {
 
           {/* Action Buttons */}
           <div className="d-flex gap-2 mt-3">
+            <button onClick={clearFilters} className="btn btn-clear-filters">
+              <i className="bi bi-x-circle me-1"></i>
+              Clear All
+            </button>
             <button onClick={applyFilters} className="btn btn-primary">
               <i className="bi bi-funnel me-1"></i>
               Apply Filters
-            </button>
-            <button onClick={clearFilters} className="btn btn-secondary">
-              <i className="bi bi-x-circle me-1"></i>
-              Clear All
             </button>
             {(filters.skills.length > 0 || filters.languages.length > 0 || filters.education.length > 0 ||
               filters.religion.length > 0 || filters.maidNumber || filters.nationality || filters.gender ||
@@ -516,7 +525,7 @@ function MaidSearch() {
                             </button>
                             <button
                               onClick={() => sendWhatsAppMessage(maid.maidId, maid.name)}
-                              className="btn btn-success"
+                              className="btn btn-whatsapp"
                               disabled={!getCompanyPhone()}
                             >
                               <i className="bi bi-whatsapp me-1"></i>
@@ -919,7 +928,7 @@ function MaidSearch() {
                 </button>
                 <button
                   onClick={() => sendWhatsAppMessage(selectedMaid.maidId, selectedMaid.name)}
-                  className="btn btn-success"
+                  className="btn btn-whatsapp"
                   disabled={!getCompanyPhone()}
                 >
                   <i className="bi bi-whatsapp me-1"></i>

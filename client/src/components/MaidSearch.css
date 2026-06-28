@@ -131,6 +131,62 @@
   font-weight: 600;
 }
 
+/* Clear All — neutral light grey */
+.btn-clear-filters {
+  background: #f1f3f5;
+  border: 1px solid #e3e6ea;
+  color: #495057;
+}
+
+.btn-clear-filters:hover {
+  background: #e9ecef;
+  border-color: #d7dbdf;
+  color: #343a40;
+}
+
+/* WhatsApp contact — official WhatsApp brand green */
+.btn-whatsapp {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+  border-color: #1ebe5d;
+  color: #fff;
+}
+
+.btn-whatsapp:disabled {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
+  opacity: 0.5;
+}
+
+/* ---- Mobile: collapse the whole filter into an accordion ---- */
+.filter-accordion-caret {
+  color: var(--brand-primary);
+  font-size: 1.15rem;
+  transition: transform 0.2s ease;
+}
+
+@media (max-width: 767.98px) {
+  .filter-card-header {
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* Hidden by default on mobile; shown when the accordion is open */
+  .filter-card .card-body {
+    display: none;
+  }
+
+  .filter-card.filters-open .card-body {
+    display: block;
+  }
+}
+
 .multi-select-dropdown .dropdown-menu {
   width: 100%;
   max-height: 300px;
