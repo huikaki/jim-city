@@ -219,14 +219,18 @@ function MaidSearch() {
     }
   };
 
+  // Company phone may be nested (local server) or flat (serverless) — read both.
+  const getCompanyPhone = () => companyInfo?.contact?.phone || companyInfo?.phone || '';
+
   const sendWhatsAppMessage = (maidId, maidName) => {
-    if (!companyInfo || !companyInfo.contact || !companyInfo.contact.phone) {
+    const phone = getCompanyPhone();
+    if (!phone) {
       alert('Company WhatsApp number not available. Please contact the administrator.');
       return;
     }
 
     // Clean phone number (remove spaces, dashes, and non-numeric characters except +)
-    const phoneNumber = companyInfo.contact.phone.replace(/[^\d+]/g, '');
+    const phoneNumber = phone.replace(/[^\d+]/g, '');
 
     // Create WhatsApp message
     const message = `Hi! I'm interested in maid ${maidId} - ${maidName}. Could you please provide more information about her availability and services?`;
@@ -513,7 +517,7 @@ function MaidSearch() {
                             <button
                               onClick={() => sendWhatsAppMessage(maid.maidId, maid.name)}
                               className="btn btn-success"
-                              disabled={!companyInfo || !companyInfo.contact || !companyInfo.contact.phone}
+                              disabled={!getCompanyPhone()}
                             >
                               <i className="bi bi-whatsapp me-1"></i>
                               {t('maid.contactWhatsApp')}
@@ -916,7 +920,7 @@ function MaidSearch() {
                 <button
                   onClick={() => sendWhatsAppMessage(selectedMaid.maidId, selectedMaid.name)}
                   className="btn btn-success"
-                  disabled={!companyInfo || !companyInfo.contact || !companyInfo.contact.phone}
+                  disabled={!getCompanyPhone()}
                 >
                   <i className="bi bi-whatsapp me-1"></i>
                   {t('maid.contactWhatsApp')}
