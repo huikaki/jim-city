@@ -1,7 +1,7 @@
-const { connectDB } = require('../_lib/db');
-const { Maid } = require('../_lib/models');
-const { verifyToken, applyCors } = require('../_lib/auth');
-const { parseForm } = require('../_lib/parseForm');
+const { connectDB } = require('../../_lib/db');
+const { Maid } = require('../../_lib/models');
+const { verifyToken, applyCors } = require('../../_lib/auth');
+const { parseForm } = require('../../_lib/parseForm');
 
 module.exports = async (req, res) => {
   if (applyCors(req, res, 'GET, PUT, DELETE, OPTIONS')) return;
